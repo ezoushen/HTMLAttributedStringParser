@@ -29,15 +29,28 @@ open class ImgHTMLTagRenderer: HTMLTagRenderer {
             let attachment = NSTextAttachment()
             attachment.image = image
             let width: CGFloat = {
-                guard let widthString = attributes["width"],
-                      let width = Double(widthString) else { return image.size.width }
+                guard let string = attributes["width"],
+                      let width = PxConvertor.toPoint(value: string)
+                else { return image.size.width }
                 return CGFloat(width)
             }()
             let height: CGFloat = {
-                guard let heightString = attributes["height"],
-                      let height = Double(heightString) else { return image.size.height }
+                guard let string = attributes["height"],
+                      let height = PxConvertor.toPoint(value: string)
+                else { return image.size.height }
                 return CGFloat(height)
             }()
+            let x: CGFloat = {
+                guard let string = attributes["x"],
+                      let x = PxConvertor.toPoint(value: string) else { return 0 }
+                return CGFloat(x)
+            }()
+            let y: CGFloat = {
+                guard let string = attributes["y"],
+                      let y = PxConvertor.toPoint(value: string) else { return 0 }
+                return CGFloat(y)
+            }()
+            attachment.bounds.origin = CGPoint(x: x, y: y)
             attachment.bounds.size = CGSize(width: width, height: height)
             let imageAttachment = NSMutableAttributedString(attachment: attachment)
             if let derivedAttributes = derivedAttributes {

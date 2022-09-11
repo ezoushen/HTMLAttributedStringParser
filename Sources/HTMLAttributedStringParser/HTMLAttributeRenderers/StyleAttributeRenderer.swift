@@ -46,14 +46,14 @@ open class StyleAttributeParser: HTMLAttributeRenderer {
                 guard let color = Color(hexString: value) else { continue }
                 applyAttribute(.backgroundColor, value: color)
             case "font-size":
-                guard let size = convert(px: value) else { continue }
+                guard let size = PxConvertor.toPoint(value: value) else { continue }
                 fontSize = CGFloat(size)
             case "font-family":
                 fontFamily = value
             case "font-weight":
                 fontWeight = Int(value)
             case "line-height":
-                guard let size = convert(px: value) else { continue }
+                guard let size = PxConvertor.toPoint(value: value) else { continue }
                 paragraphStyleMutated = true
                 paragraphStyle.maximumLineHeight = size
                 paragraphStyle.minimumLineHeight = size
@@ -74,12 +74,6 @@ open class StyleAttributeParser: HTMLAttributeRenderer {
             applyAttribute(.font, value: font)
         }
         return attributes.isEmpty ? nil : attributes
-    }
-
-    private func convert(px value: String) -> CGFloat? {
-        guard value.hasSuffix("px"),
-              let size = Double(String(value.dropLast(2))) else { return nil }
-        return CGFloat(size)
     }
 
     /// Create a dictionary keyed by style properties
