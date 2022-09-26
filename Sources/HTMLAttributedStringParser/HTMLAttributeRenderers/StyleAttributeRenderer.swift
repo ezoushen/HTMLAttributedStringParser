@@ -38,12 +38,13 @@ open class StyleAttributeParser: HTMLAttributeRenderer {
         var paragraphStyleMutated = false
 
         for (key, value) in properties {
+            let value = value.trimmingCharacters(in: .whitespacesAndNewlines)
             switch key {
             case "color":
-                guard let color = Color(hexString: value) else { continue }
+                guard let color = Color(cssStyle: value) else { continue }
                 applyAttribute(.foregroundColor, value: color)
             case "background-color":
-                guard let color = Color(hexString: value) else { continue }
+                guard let color = Color(cssStyle: value) else { continue }
                 applyAttribute(.backgroundColor, value: color)
             case "font-size":
                 guard let size = PxConvertor.toPoint(value: value) else { continue }
